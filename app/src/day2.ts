@@ -16,12 +16,14 @@ export const day2Part1 = (file: string): number => pipe(
     (lines: string[]): Game[] => lines.map(parseRowIntoGame),
     (games: Game[]) => games.filter(isPossible),
     (games: Game[]) => games.reduce((sum, current) => sum + current.id, 0)
-// for each game identify whether or not game is possible 
-// break file down into games
-// break game into ID + num of hands
-// for each hand determine if possible
-// (game is impossible if in single hand num red cubes exceeds 12, num green cubes exceeds 13, num blue cubes exceeds 14)
-// return sum total of all possible games
+)
+
+export const day2Part2 = (file: string): number => pipe(
+    parseTextFileIntoRows(file),
+    (lines: string[]): Game[] => lines.map(parseRowIntoGame),
+    (games: Game[]): Hand[] => games.map(calculateMinimumCubes),
+    (cubes: Hand[]): number[] => cubes.map(calculatePower),
+    (powers: number[]): number => powers.reduce((sum, current) => sum + current, 0)
 )
 
 export const parseRowIntoGame = (row: string): Game => {
@@ -43,11 +45,26 @@ export const parseRowIntoGame = (row: string): Game => {
     }
 }
 
+const calculateMinimumCubes = (game: Game): Hand => {
+    const empty: Hand = {
+        red: 0,
+        green: 0,
+        blue: 0
+    }
+    return game.hands.reduce((total, current) => {
+        return {
+            red: Math.max(total.red, current.red),
+            green: Math.max(total.green, current.green),
+            blue: Math.max(total.blue, current.blue)
+        }
+    }, empty)
+}
+
+const calculatePower = (cubes: Hand): number => cubes.red * cubes.green * cubes.blue
+
 const extractColour = (colours: string[], colour: string): number => {
     const colourString = colours.filter(string => string.includes(colour))[0] || "0"
     return +colourString.match(/\d+/)![0]
 }
 
-const isPossible = (game: Game): boolean => game.hands.every(hand => {
-    return hand.red <= 12 && hand.green <= 13 && hand.blue <= 14
-})
+const isPossible = (game: Game): boolean => game.hands.every(hand => hand.red <= 12 && hand.green <= 13 && hand.blue <= 14)
