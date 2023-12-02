@@ -1,19 +1,17 @@
-import { pipe } from "./utils"
+import { pipe, parseTextFileIntoRows } from "./utils"
 
 export const day1Part1 = (file: string): number => pipe(
-    parseTextFile(file),
+    parseTextFileIntoRows(file),
     (lines: string[]): number[] => lines.map(generateCalibrationValueFromDigits),
     (calibrationValues: number[]): number => calibrationValues.reduce((sum, current) => sum + current, 0)
 )
 
 export const day1Part2 = (file: string): number => pipe(
-    parseTextFile(file),
+    parseTextFileIntoRows(file),
     (lines: string[]): string[] => lines.map(replaceNumbersWithDigits),
     (lines: string[]): number[] => lines.map(generateCalibrationValueFromDigits),
     (calibrationValues: number[]): number => calibrationValues.reduce((sum, current) => sum + current, 0)
 )
-
-const parseTextFile = (file: string): string[] => file.split("\n").filter(n => n)
 
 export const generateCalibrationValueFromDigits = (line: string): number => {
     const numericChars = line.replace(/\D+/g, "")

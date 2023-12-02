@@ -24,3 +24,4 @@ export function pipe<FirstFn extends AnyFunc, F extends AnyFunc[]>(
     return (fns as AnyFunc[]).reduce((acc, fn) => fn(acc), firstFn(arg))
 }
   
+export const parseTextFileIntoRows = (file: string): string[] => file.split("\n").filter(n => n)

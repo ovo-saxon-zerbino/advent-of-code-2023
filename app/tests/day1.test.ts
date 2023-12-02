@@ -45,21 +45,21 @@ test("replaces numbers in text with correct digit", () => {
     const res = testData.map(replaceNumbersWithDigits)
 
     // Assert
-    expect(res[0]).toContain("zero");
-    expect(res[1]).toContain("1");
-    expect(res[2]).toContain("2");
-    expect(res[3]).toContain("3");
-    expect(res[4]).toContain("4");
-    expect(res[5]).toContain("5");
-    expect(res[6]).toContain("6");
-    expect(res[7]).toContain("7");
-    expect(res[8]).toContain("8");
-    expect(res[9]).toContain("9");
-    expect(res[10]).toContain("9");
-    expect(res[11]).toContain("9");
-    expect(res[12]).toContain("1");
-    expect(res[13]).toBe("o1e8t");
-    expect(res[14]).toBe("s7n9e");
+    expect(res[0]).toBe("zero");
+    expect(res[1]).toBe("1");
+    expect(res[2]).toBe("2");
+    expect(res[3]).toBe("3");
+    expect(res[4]).toBe("4");
+    expect(res[5]).toBe("5");
+    expect(res[6]).toBe("6");
+    expect(res[7]).toBe("7");
+    expect(res[8]).toBe("8");
+    expect(res[9]).toBe("9");
+    expect(res[10]).toBe("19");
+    expect(res[11]).toBe("192");
+    expect(res[12]).toBe("12");
+    expect(res[13]).toBe("18");
+    expect(res[14]).toBe("79");
 });
 
 test("Day 1 part 1 generates correct value for known data set", () => {
