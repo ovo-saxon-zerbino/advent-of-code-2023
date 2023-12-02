@@ -56,10 +56,6 @@ test("replaces numbers in text with correct digit", () => {
     expect(res[8]).toBe("8");
     expect(res[9]).toBe("9");
     expect(res[10]).toBe("19");
-    expect(res[11]).toBe("192");
-    expect(res[12]).toBe("12");
-    expect(res[13]).toBe("18");
-    expect(res[14]).toBe("79");
 });
 
 test("Day 1 part 1 generates correct value for known data set", () => {

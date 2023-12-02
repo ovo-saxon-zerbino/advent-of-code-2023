@@ -8,7 +8,7 @@ export const day1Part1 = (file: string): number => pipe(
 
 export const day1Part2 = (file: string): number => pipe(
     parseTextFileIntoRows(file),
-    (lines: string[]): string[] => lines.map(replaceNumbersWithDigits),
+    (lines: string[]): string[] => lines.map(replaceNumbersWithDigitsAndStripExcess),
     (lines: string[]): number[] => lines.map(generateCalibrationValueFromDigits),
     (calibrationValues: number[]): number => calibrationValues.reduce((sum, current) => sum + current, 0)
 )
@@ -23,9 +23,8 @@ export const generateCalibrationValueFromDigits = (line: string): number => {
     return +calibrationValue
 }
 
-export const replaceNumbersWithDigits = (line: string): string => 
-    line
-        .split(/(?=(one|two|three|four|five|six|seven|eight|nine))/)
+export const replaceNumbersWithDigitsAndStripExcess = (line: string): string => {
+    return Array.from(line.matchAll(/(?=(zero|one|two|three|four|five|six|seven|eight|nine|\d))/g), x => x[1])
         .map((string: string) => {
             string = string.replace("one", "1")
             string = string.replace("two", "2")
@@ -39,3 +38,4 @@ export const replaceNumbersWithDigits = (line: string): string =>
             return string
         })
         .reduce((acc, value) => acc.concat(value), "")
+    }
