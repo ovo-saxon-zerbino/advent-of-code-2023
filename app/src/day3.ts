@@ -92,15 +92,7 @@ const isValid = (schematic: string[][]) => (part: Part): boolean => {
     const xs = [part.xs[0] - 1, ...part.xs, part.xs[part.xs.length - 1] + 1].filter(x => x > 0 && x < schematic[0].length)
     const ys = [part.y - 1, part.y, part.y + 1].filter(x => x > 0 && x < schematic.length)
 
-    let isValid = false
-    xs.forEach(x => {
-        ys.forEach(y => {
-            isValid = isValid || schematic[y][x] !== "." && !isNumeric(schematic[y][x])
-            if (isValid) return
-        })
-        if (isValid) return
-    })
-    return isValid
+    return xs.some(x => ys.some(y => schematic[y][x] !== "." && !isNumeric(schematic[y][x])))
 }
 
 const isNumeric = (value: string) => !isNaN(parseFloat(value)) && isFinite(+value);
@@ -113,22 +105,21 @@ const findGears = (schematic: string[][]) => (parts: Part[]): Gear[] => {
         }
     }
 
-    let gears: Gear[] = []
-    potentialGearLocations.forEach(gear => {
-        let partsAdjacentToGear: number[] = parts
-            .filter(part => {
-                return [part.y - 1, part.y, part.y + 1].includes(gear.y) 
-                    && [part.xs[0] - 1, ...part.xs, part.xs[part.xs.length - 1] + 1].includes(gear.x)
-            })
-            .map(part => part.value)
-        if (partsAdjacentToGear.length === 2) {
-            gears.push({
+    return potentialGearLocations
+        .filter(potentialGear => findPartsAdjacentToAGear(parts, potentialGear).length === 2)
+        .map(gear => {
+            const partsAdjacentToGear = findPartsAdjacentToAGear(parts, gear).map(part => part.value)
+            return {
                 part1: partsAdjacentToGear[0],
                 part2: partsAdjacentToGear[1],
-            })
-        }
-    })
-    return gears
+            }
+        })
 }
+
+const findPartsAdjacentToAGear = (parts: Part[], gear: Coordinate) => parts
+    .filter(part => {
+        return [part.y - 1, part.y, part.y + 1].includes(gear.y) 
+            && [part.xs[0] - 1, ...part.xs, part.xs[part.xs.length - 1] + 1].includes(gear.x)
+    })
 
 const calculateGearRatio = (gear: Gear): number => gear.part1 * gear.part2
