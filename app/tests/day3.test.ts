@@ -1,4 +1,4 @@
-import { day3Part1, Part, buildPartsMatrix } from "../src/day3"
+import { day3Part1, day3Part2, Part, buildPartsMatrix } from "../src/day3"
 
 test("Serialises char matrix to PartsMatrix correctly", () => {
     // Arrange
@@ -56,4 +56,20 @@ test("Day 3 part 1 generates correct value for known data set", () => {
 .664.598..
 `
     expect(day3Part1(testData)).toBe(4361)
+})
+
+test("Day 3 part 2 generates correct value for known data set", () => {
+    const testData = `
+467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+`
+    expect(day3Part2(testData)).toBe(467835)
 })

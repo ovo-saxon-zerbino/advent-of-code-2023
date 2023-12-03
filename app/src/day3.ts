@@ -6,12 +6,18 @@ export type Part = {
     y: number
 }
 
+type Gear = {
+    part1: number
+    part2: number
+}
+
+type Coordinate = {
+    x: number
+    y: number
+}
+
 export const day3Part1 = (file: string): number => {
-    const schematic = pipe(
-        parseTextFileIntoRows(file),
-        (rows: string[]) => rows.filter(row => !!row),
-        (rows: string[]) => rows.map(parseTextRowIntoCharArray)
-    )
+    const schematic = buildSchematic(file)
 
     return pipe(
         buildPartsMatrix(schematic),
@@ -19,6 +25,23 @@ export const day3Part1 = (file: string): number => {
         (parts: Part[]) => parts.reduce((sum, current) => sum + current.value, 0)
     )
 }
+
+export const day3Part2 = (file: string): number => {
+    const schematic = buildSchematic(file)
+
+    return pipe(
+        buildPartsMatrix(schematic),
+        findGears(schematic),
+        (gears) => gears.map(calculateGearRatio),
+        (gearRatios: number[]) => gearRatios.reduce((sum, current) => sum + current, 0)
+    )
+}
+
+const buildSchematic = (file: string) => pipe(
+    parseTextFileIntoRows(file),
+    (rows: string[]) => rows.filter(row => !!row),
+    (rows: string[]) => rows.map(parseTextRowIntoCharArray)
+)
 
 const parseTextRowIntoCharArray = (row: string): string[] => row.split("")
 
@@ -81,3 +104,31 @@ const isValid = (schematic: string[][]) => (part: Part): boolean => {
 }
 
 const isNumeric = (value: string) => !isNaN(parseFloat(value)) && isFinite(+value);
+
+const findGears = (schematic: string[][]) => (parts: Part[]): Gear[] => {
+    let potentialGearLocations: Coordinate[] = []
+    for (let y = 0; y < schematic.length; y++) {
+        for (let x = 0; x < schematic[y].length; x++) {
+            if (schematic[y][x] === "*") potentialGearLocations.push({ x, y })
+        }
+    }
+
+    let gears: Gear[] = []
+    potentialGearLocations.forEach(gear => {
+        let partsAdjacentToGear: number[] = parts
+            .filter(part => {
+                return [part.y - 1, part.y, part.y + 1].includes(gear.y) 
+                    && [part.xs[0] - 1, ...part.xs, part.xs[part.xs.length - 1] + 1].includes(gear.x)
+            })
+            .map(part => part.value)
+        if (partsAdjacentToGear.length === 2) {
+            gears.push({
+                part1: partsAdjacentToGear[0],
+                part2: partsAdjacentToGear[1],
+            })
+        }
+    })
+    return gears
+}
+
+const calculateGearRatio = (gear: Gear): number => gear.part1 * gear.part2
