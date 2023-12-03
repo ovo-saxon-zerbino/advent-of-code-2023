@@ -1,4 +1,4 @@
-import { generateCalibrationValueFromDigits, replaceNumbersWithDigits, day1Part1, day1Part2 } from "../src/day1"
+import { generateCalibrationValueFromDigits, replaceNumbersWithDigitsAndStripExcess, day1Part1, day1Part2 } from "../src/day1"
 
 test("generates correct calibration using only digits", () => {
     // Arrange
@@ -42,7 +42,7 @@ test("replaces numbers in text with correct digit", () => {
     ]
 
     // Act
-    const res = testData.map(replaceNumbersWithDigits)
+    const res = testData.map(replaceNumbersWithDigitsAndStripExcess)
 
     // Assert
     expect(res[0]).toBe("zero");

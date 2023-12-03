@@ -20,10 +20,10 @@ export const day2Part1 = (file: string): number => pipe(
 
 export const day2Part2 = (file: string): number => pipe(
     parseTextFileIntoRows(file),
-    (lines: string[]): Game[] => lines.map(parseRowIntoGame),
-    (games: Game[]): Hand[] => games.map(calculateMinimumCubes),
-    (cubes: Hand[]): number[] => cubes.map(calculatePower),
-    (powers: number[]): number => powers.reduce((sum, current) => sum + current, 0)
+    (lines: string[]) => lines.map(parseRowIntoGame),
+    (games: Game[]) => games.map(calculateMinimumCubes),
+    (cubes: Hand[]) => cubes.map(calculatePower),
+    (powers: number[]) => powers.reduce((sum, current) => sum + current, 0)
 )
 
 export const parseRowIntoGame = (row: string): Game => {

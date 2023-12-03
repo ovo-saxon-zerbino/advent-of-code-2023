@@ -2,15 +2,15 @@ import { pipe, parseTextFileIntoRows } from "./utils"
 
 export const day1Part1 = (file: string): number => pipe(
     parseTextFileIntoRows(file),
-    (lines: string[]): number[] => lines.map(generateCalibrationValueFromDigits),
-    (calibrationValues: number[]): number => calibrationValues.reduce((sum, current) => sum + current, 0)
+    (lines: string[]) => lines.map(generateCalibrationValueFromDigits),
+    (calibrationValues: number[]) => calibrationValues.reduce((sum, current) => sum + current, 0)
 )
 
 export const day1Part2 = (file: string): number => pipe(
     parseTextFileIntoRows(file),
-    (lines: string[]): string[] => lines.map(replaceNumbersWithDigitsAndStripExcess),
-    (lines: string[]): number[] => lines.map(generateCalibrationValueFromDigits),
-    (calibrationValues: number[]): number => calibrationValues.reduce((sum, current) => sum + current, 0)
+    (lines: string[]) => lines.map(replaceNumbersWithDigitsAndStripExcess),
+    (lines: string[]) => lines.map(generateCalibrationValueFromDigits),
+    (calibrationValues: number[]) => calibrationValues.reduce((sum, current) => sum + current, 0)
 )
 
 export const generateCalibrationValueFromDigits = (line: string): number => {
