@@ -13,7 +13,7 @@ type Hand = {
 
 export const day2Part1 = (file: string): number => pipe(
     parseTextFileIntoRows(file),
-    (lines: string[]): Game[] => lines.map(parseRowIntoGame),
+    (lines: string[]) => lines.map(parseRowIntoGame),
     (games: Game[]) => games.filter(isPossible),
     (games: Game[]) => games.reduce((sum, current) => sum + current.id, 0)
 )
