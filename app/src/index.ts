@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 import { day1Part1, day1Part2 } from "./day1"
 import { day2Part1, day2Part2 } from "./day2"
 import { day3Part1, day3Part2 } from "./day3"
-import { day4Part1 } from "./day4"
+import { day4Part1, day4Part2 } from "./day4"
 
 // Day 1
 const day1DataFile = path.join(__dirname, "../static/day-1-input.txt")
@@ -31,3 +31,4 @@ const day4DataFile = path.join(__dirname, "../static/day-4-input.txt")
 const day4Data = readFileSync(day4DataFile, 'utf8')
 
 console.log(`Day 4, part 1 answer: ${day4Part1(day4Data)}`)
+console.log(`Day 4, part 2 answer: ${day4Part2(day4Data)}`)

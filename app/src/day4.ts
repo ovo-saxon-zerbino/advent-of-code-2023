@@ -5,12 +5,46 @@ export type ScratchCard = {
     actual: number[]
 }
 
+type cardWin = {
+    wins: number
+    quantity: number
+}
+
 export const day4Part1 = (file: string): number => pipe(
     parseTextFileIntoRows(file),
     (lines: string[]) => lines.map(parseRowIntoScratchCard),
     (cards: ScratchCard[]) => cards.map(scoreCard),
     (scores: number[]) => scores.reduce((sum, current) => sum + current, 0)
 )
+
+export const day4Part2 = (file: string): number => {
+    const cards = pipe(
+        parseTextFileIntoRows(file),
+        (lines: string[]) => lines.map(parseRowIntoScratchCard)
+    )
+    
+    const cardWins: cardWin[] = cards.map((card, index) => { return {
+        id: index + 1,
+        wins: countWins(card),
+        quantity: 1
+    }})
+
+    cardWins.forEach((card, index) => {
+        let nextCardIndices: number[] = card.wins == 0 
+            ? []
+            : range(index + 1, index + card.wins, 1)
+        
+        nextCardIndices = nextCardIndices.filter(x => x < cardWins.length)
+
+        nextCardIndices.forEach(index => {
+            cardWins[index].quantity += card.quantity
+        })
+    })
+
+    return cardWins.reduce((sum, current) => sum + current.quantity, 0)
+}
+
+const range = (start: number, stop: number, step: number): number[] => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
 
 export const parseRowIntoScratchCard = (row: string): ScratchCard => {
     const numbers = row.split(":")[1].split("|")
@@ -25,10 +59,8 @@ export const parseRowIntoScratchCard = (row: string): ScratchCard => {
 
 const extractNumbers = (numberString: string) => numberString.split(/\D/).filter(x => !!x).map(x => +x)
 
-const scoreCard = (card: ScratchCard): number => {
-    const winningCount = card.actual.filter(x => card.winning.includes(x)).length
+const scoreCard = (card: ScratchCard): number => countWins(card) === 0 
+    ? 0 
+    : Math.pow(2, countWins(card) - 1)
 
-    return winningCount === 0 
-        ? 0 
-        : Math.pow(2, winningCount - 1)
-}
+const countWins = (card: ScratchCard): number => card.actual.filter(x => card.winning.includes(x)).length
