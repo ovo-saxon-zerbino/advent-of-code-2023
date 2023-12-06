@@ -23,21 +23,7 @@ type AlmanacRange = {
 }
 
 export const day5Part1 = (file: string): number => pipe(
-    // TODO - 
-    // convert input into: 
-    //      a list of seeds to plant
-    //      a collection of maps from source number to destination number
-    // each row in map is made up of destination range start, source range start, range length
-    // e.g. 
-    // 50 98 2
-    // 52 50 48
-    // means inputs 98, 99 map to outputs 50, 51, & inputs 50 to 97 map to outputs 52 to 99
-    // any source that isn't explicitly mapped maps 1:1 with its output, e.g. in the above input 47 maps to output 47
-
-    // aim: find the lowest location number that corresponds to any of the initial seeds
-    // (map seed -> soil -> fertilizer -> water -> light -> temperature -> humidity -> location)
-
-    // Build Almanac 
+    buildSeedList(file),
     buildAlmanac(file),
     mapToSoil,
     mapToFertilizer,
@@ -46,21 +32,44 @@ export const day5Part1 = (file: string): number => pipe(
     mapToTemperature,
     mapToHumidity,
     mapToLocation,
-    // return smallest location value in list
     (almanac: Almanac) => Math.min(...almanac.seeds)
 )
 
 export const day5Part2 = (file: string): number => pipe(
-    parseTextFileIntoRows(file),
-    (rows) => 0
+    buildSeedRange(file),
+    buildAlmanac(file),
+    mapToSoil,
+    mapToFertilizer,
+    mapToWater,
+    mapToLight,
+    mapToTemperature,
+    mapToHumidity,
+    mapToLocation,
+    (almanac: Almanac) => Math.min(...almanac.seeds)
 )
 
-export const buildAlmanac = (file: string): Almanac => {
-    const fileRows = parseTextFileIntoRows(file)
-    
-    let seeds: number[] = fileRows[0].split(":")[1].split(/\D/).filter(x => !!x).map(x => +x)
+export const buildSeedList = (file: string): number[] => parseTextFileIntoRows(file)[0]
+    .split(":")[1]
+    .split(/\D/)
+    .filter(x => !!x)
+    .map(x => +x)
 
-    // console.log(seeds)
+// TODO modify this so seeds are pairs of start, length and evaluate all seeds
+export const buildSeedRange = (file: string): number[] => {
+    const rawSeeds = buildSeedList(file)
+    let res: number[] = []
+    // 0, 2, etc is start of range, 1, 3 etc is length of range
+    for (let i = 0; i < rawSeeds.length; i += 2) {
+        const seedRange = range(rawSeeds[i], rawSeeds[i] + rawSeeds[i+1] - 1, 1)
+        res.push(...seedRange)
+    }
+    return res
+}
+
+const range = (start: number, stop: number, step: number): number[] => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
+
+export const buildAlmanac = (file: string) => (seeds: number[]): Almanac => {
+    const fileRows = parseTextFileIntoRows(file)
 
     let toSoilMapStart = -1
     let toFertilizerMapStart = -1
