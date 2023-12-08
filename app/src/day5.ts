@@ -54,7 +54,6 @@ export const buildSeedList = (file: string): number[] => parseTextFileIntoRows(f
     .filter(x => !!x)
     .map(x => +x)
 
-// TODO modify this so seeds are pairs of start, length and evaluate all seeds
 export const buildSeedRange = (file: string): number[] => {
     const rawSeeds = buildSeedList(file)
     let res: number[] = []

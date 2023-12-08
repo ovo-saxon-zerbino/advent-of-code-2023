@@ -39,3 +39,5 @@ const day5DataFile = path.join(__dirname, "../static/day-5-input.txt")
 const day5Data = readFileSync(day5DataFile, 'utf8')
 
 console.log(`Day 5, part 1 answer: ${day5Part1(day5Data)}`)
+// This will crash due to memory limits because I brute forced it
+// console.log(`Day 5, part 2 answer: ${day5Part2(day5Data)}`)
